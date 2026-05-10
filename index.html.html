@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book A Teacher – Virtual Learning Sessions</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#F5F6F8;color:#1a1a1a}
+:root{
+  --bg:#ffffff;--bg2:#F5F6F8;
+  --border:#E2E4E8;
+  --text:#1a1a1a;--text2:#5C6270;--text3:#8C919E;
+  --blue:#185FA5;--blue-bg:#E6F1FB;--blue-text:#0C447C;
+  --green-bg:#EAF3DE;--green-text:#3B6D11;--green-border:#C3DFA0;
+  --orange-bg:#FAEEDA;--orange-text:#854F0B;
+  --radius:8px;--radius-lg:12px;
+}
+.app{max-width:960px;margin:0 auto;min-height:100vh}
+.nav{background:var(--bg);border-bottom:1px solid var(--border);padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;height:54px;position:sticky;top:0;z-index:50}
+.nav-brand{font-size:15px;font-weight:600;display:flex;align-items:center;gap:8px}
+.nav-brand b{color:var(--blue)}
+.nav-tabs{display:flex;gap:4px}
+.nav-tab{padding:6px 14px;border-radius:var(--radius);font-size:13px;cursor:pointer;border:none;background:transparent;color:var(--text2);transition:all .15s;font-family:inherit}
+.nav-tab.active{background:var(--blue-bg);color:var(--blue-text);font-weight:500}
+.nav-tab:hover:not(.active){background:var(--bg2);color:var(--text)}
+.main{padding:1.5rem}
+.section{display:none}.section.active{display:block}
+
+.hero{background:var(--bg);border-radius:var(--radius-lg);border:1px solid var(--border);padding:2rem;margin-bottom:1.5rem;display:flex;align-items:flex-start;justify-content:space-between;gap:1rem}
+.hero h1{font-size:22px;font-weight:600;margin-bottom:6px}
+.hero p{font-size:14px;color:var(--text2);line-height:1.6}
+.badge{display:inline-block;font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px;margin-bottom:10px;background:var(--blue-bg);color:var(--blue-text)}
+.price-box{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-lg);padding:14px 20px;text-align:center;flex-shrink:0;min-width:160px}
+.price-box .amt{font-size:26px;font-weight:700;color:var(--blue)}
+.price-box .lbl{font-size:11px;color:var(--text2);margin-top:2px}
+.price-box .incl{font-size:10px;color:var(--green-text);margin-top:6px;background:var(--green-bg);padding:3px 8px;border-radius:20px;display:inline-block}
+
+.filter-bar{display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap}
+.fbtn{padding:6px 14px;border-radius:20px;font-size:13px;cursor:pointer;border:1px solid var(--border);background:var(--bg);color:var(--text2);transition:all .15s;font-family:inherit}
+.fbtn.active{background:var(--blue);color:#fff;border-color:var(--blue);font-weight:500}
+.fbtn:hover:not(.active){background:var(--bg2)}
+
+.schedule-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
+.day-card{background:var(--bg);border-radius:var(--radius-lg);border:1px solid var(--border);overflow:hidden}
+.day-hdr{padding:10px 14px;border-bottom:1px solid var(--border);background:var(--bg2)}
+.day-hdr .wk{font-size:11px;color:var(--text3);margin-bottom:1px}
+.day-hdr .dy{font-size:13px;font-weight:600}
+.sess{padding:10px 14px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .12s}
+.sess:last-child{border-bottom:none}
+.sess:hover{background:var(--bg2)}
+.sess-time{font-size:11px;color:var(--text3);margin-bottom:2px}
+.sess-name{font-size:13px;font-weight:500}
+.sess-row{display:flex;align-items:center;justify-content:space-between;margin-top:4px}
+.lvl{font-size:11px;padding:2px 7px;border-radius:4px;display:inline-block;font-weight:500}
+.lvl-b{background:var(--green-bg);color:var(--green-text)}
+.lvl-i{background:var(--orange-bg);color:var(--orange-text)}
+.lvl-a{background:var(--blue-bg);color:var(--blue-text)}
+.sess-price{font-size:11px;font-weight:600;color:var(--blue)}
+.math-bar{border-left:3px solid var(--blue)}
+.read-bar{border-left:3px solid #0F6E56}
+
+.closed-week{grid-column:1/-1;background:var(--bg);border-radius:var(--radius-lg);border:1px solid var(--border);overflow:hidden}
+.closed-header{padding:10px 14px;border-bottom:1px solid var(--border);background:var(--orange-bg)}
+.closed-header .wk{font-size:11px;color:var(--orange-text);margin-bottom:1px}
+.closed-header .dy{font-size:13px;font-weight:600;color:var(--orange-text)}
+.closed-notice{padding:16px 14px;display:flex;align-items:center;gap:14px}
+.closed-icon{font-size:28px;flex-shrink:0}
+.closed-title{font-size:14px;font-weight:600;color:var(--orange-text)}
+.closed-sub{font-size:13px;color:var(--text2);margin-top:3px;line-height:1.5}
+
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:200;display:none;align-items:center;justify-content:center;padding:1rem}
+.modal-overlay.open{display:flex}
+.modal{background:var(--bg);border-radius:var(--radius-lg);border:1px solid var(--border);padding:1.5rem;width:500px;max-width:100%;position:relative;max-height:90vh;overflow-y:auto}
+.modal h2{font-size:19px;font-weight:600;margin-bottom:4px}
+.modal-meta{font-size:13px;color:var(--text2);margin-bottom:4px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.modal-price{font-size:13px;font-weight:600;color:var(--blue)}
+.modal-close{position:absolute;top:1rem;right:1rem;background:none;border:none;cursor:pointer;color:var(--text2);font-size:22px;line-height:1}
+.modal-desc{font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border)}
+.modal-tabs{display:flex;gap:2px;margin-bottom:1rem;border-bottom:1px solid var(--border)}
+.modal-tab{padding:7px 14px;font-size:13px;cursor:pointer;border:none;background:none;color:var(--text2);border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s;font-family:inherit}
+.modal-tab.active{color:var(--blue);border-bottom-color:var(--blue);font-weight:500}
+.mtab{display:none}.mtab.active{display:block}
+.mtab ul{list-style:none;padding:0}
+.mtab li{font-size:13px;color:var(--text2);padding:4px 0;display:flex;align-items:flex-start;gap:8px;line-height:1.5}
+.mtab li::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--blue);margin-top:7px;flex-shrink:0}
+.enroll-btn{width:100%;padding:11px;background:var(--blue);color:#fff;border:none;border-radius:var(--radius);font-size:14px;font-weight:600;cursor:pointer;margin-top:1rem;transition:opacity .15s;font-family:inherit}
+.enroll-btn:hover{opacity:.9}
+
+.card{background:var(--bg);border-radius:var(--radius-lg);border:1px solid var(--border);padding:1.5rem;max-width:580px}
+.fg{margin-bottom:1rem}
+.fl{display:block;font-size:13px;font-weight:500;margin-bottom:5px;color:var(--text2)}
+.fi{width:100%;padding:9px 12px;border-radius:var(--radius);border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:14px;font-family:inherit}
+.fi:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(24,95,165,.12)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.sess-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px}
+.sess-opt{padding:10px 12px;border-radius:var(--radius);border:1px solid var(--border);cursor:pointer;transition:all .15s}
+.sess-opt.sel{border-color:var(--blue);background:var(--blue-bg)}
+.sess-opt .sn{font-size:13px;font-weight:500}
+.sess-opt .sm{font-size:11px;color:var(--text2);margin-top:2px}
+.sess-opt .sp{font-size:12px;color:var(--blue);font-weight:600;margin-top:4px}
+.resources-note{background:var(--green-bg);border:1px solid var(--green-border);border-radius:var(--radius);padding:10px 12px;font-size:12px;color:var(--green-text);margin-top:8px;line-height:1.5}
+.order-box{background:var(--bg2);border-radius:var(--radius);padding:12px 14px;margin-bottom:1rem;border:1px solid var(--border)}
+.orow{display:flex;justify-content:space-between;font-size:13px;padding:3px 0;color:var(--text2)}
+.ototal{display:flex;justify-content:space-between;font-size:14px;font-weight:600;padding-top:8px;margin-top:6px;border-top:1px solid var(--border);color:var(--text)}
+.oempty{font-size:13px;color:var(--text3);text-align:center;padding:4px 0}
+.sub-btn{width:100%;padding:11px;background:var(--blue);color:#fff;border:none;border-radius:var(--radius);font-size:14px;font-weight:600;cursor:pointer;transition:opacity .15s;font-family:inherit}
+.sub-btn:hover{opacity:.9}
+.ok-msg{background:var(--green-bg);border:1px solid var(--green-border);border-radius:var(--radius);padding:12px 16px;font-size:13px;color:var(--green-text);margin-top:1rem;display:none}
+
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:1.5rem}
+.ci{display:flex;align-items:flex-start;gap:10px}
+.ci-icon{width:34px;height:34px;border-radius:var(--radius);background:var(--blue-bg);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:17px;color:var(--blue)}
+.ci-lbl{font-size:11px;color:var(--text3);margin-bottom:2px}
+.ci-val{font-size:13px;font-weight:500}
+
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:1.5rem}
+.stat{background:var(--bg2);border-radius:var(--radius);padding:1rem;border:1px solid var(--border)}
+.stat-lbl{font-size:12px;color:var(--text2);margin-bottom:4px}
+.stat-val{font-size:22px;font-weight:700}
+.admin-tabs{display:flex;gap:4px;margin-bottom:1.5rem;border-bottom:1px solid var(--border)}
+.atab{padding:8px 16px;font-size:13px;cursor:pointer;border:none;background:none;color:var(--text2);border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s;font-family:inherit}
+.atab.active{color:var(--blue);border-bottom-color:var(--blue);font-weight:500}
+.asec{display:none}.asec.active{display:block}
+.tbl-card{background:var(--bg);border-radius:var(--radius-lg);border:1px solid var(--border);overflow:hidden}
+.tbl-hdr{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.tbl-hdr h3{font-size:14px;font-weight:600}
+table{width:100%;border-collapse:collapse;font-size:13px;table-layout:fixed}
+th{padding:10px 16px;text-align:left;font-size:12px;font-weight:500;color:var(--text2);background:var(--bg2);border-bottom:1px solid var(--border)}
+td{padding:10px 16px;border-bottom:1px solid var(--border);color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+tr:last-child td{border-bottom:none}
+.pill{font-size:11px;padding:3px 9px;border-radius:20px;font-weight:500}
+.pill-ok{background:var(--green-bg);color:var(--green-text)}
+.pill-pend{background:var(--orange-bg);color:var(--orange-text)}
+.pg-title{font-size:20px;font-weight:600;margin-bottom:4px}
+.pg-sub{font-size:13px;color:var(--text2);margin-bottom:1.5rem}
+</style>
+</head>
+<body>
+<div class="app">
+  <nav class="nav">
+    <div class="nav-brand"><i class="ti ti-school"></i> Book A <b>Teacher</b></div>
+    <div class="nav-tabs">
+      <button class="nav-tab active" onclick="showPage('schedule',this)"><i class="ti ti-calendar"></i> Schedule</button>
+      <button class="nav-tab" onclick="showPage('register',this)"><i class="ti ti-user-plus"></i> Register</button>
+      <button class="nav-tab" onclick="showPage('contact',this)"><i class="ti ti-mail"></i> Contact</button>
+      <button class="nav-tab" onclick="showPage('admin',this)"><i class="ti ti-layout-dashboard"></i> Admin</button>
+    </div>
+  </nav>
+  <div class="main">
+
+    <div id="pg-schedule" class="section active">
+      <div class="hero">
+        <div>
+          <div class="badge">Summer 2025 · Jun 1 – Jul 24</div>
+          <h1>Virtual Learning Session Schedule</h1>
+          <p>Mon–Thu, 5:00–8:00 PM · Three skill levels each evening in Math and Reading<br>Tap any session to view the full outline.</p>
+        </div>
+        <div class="price-box">
+          <div class="amt">$39.75</div>
+          <div class="lbl">per virtual learning session</div>
+          <div class="incl">✓ Includes all learning resources</div>
+        </div>
+      </div>
+      <div class="filter-bar">
+        <button class="fbtn active" onclick="setFilter('all',this)">All</button>
+        <button class="fbtn" onclick="setFilter('math',this)">Math only</button>
+        <button class="fbtn" onclick="setFilter('reading',this)">Reading only</button>
+        <button class="fbtn" onclick="setFilter('beginner',this)">Beginner</button>
+        <button class="fbtn" onclick="setFilter('intermediate',this)">Intermediate</button>
+        <button class="fbtn" onclick="setFilter('advanced',this)">Advanced</button>
+      </div>
+      <div class="schedule-grid" id="sched-grid"></div>
+    </div>
+
+    <div id="pg-register" class="section">
+      <p class="pg-title">Enroll your child</p>
+      <p class="pg-sub">Select virtual learning sessions below — your total updates automatically at $39.75 per session.</p>
+      <div class="card">
+        <div class="form-row">
+          <div class="fg"><label class="fl">Child's first name</label><input class="fi" type="text" placeholder="e.g. Jordan"></div>
+          <div class="fg"><label class="fl">Child's last name</label><input class="fi" type="text" placeholder="e.g. Smith"></div>
+        </div>
+        <div class="form-row">
+          <div class="fg"><label class="fl">Grade (2024–25)</label>
+            <select class="fi"><option value="">Select grade</option><option>Kindergarten</option><option>1st</option><option>2nd</option><option>3rd</option><option>4th</option><option>5th</option><option>6th</option><option>7th</option><option>8th</option></select>
+          </div>
+          <div class="fg"><label class="fl">Parent / guardian name</label><input class="fi" type="text" placeholder="Full name"></div>
+        </div>
+        <div class="fg"><label class="fl">Parent email</label><input class="fi" type="email" placeholder="email@example.com"></div>
+        <div class="fg"><label class="fl">Parent phone</label><input class="fi" type="tel" placeholder="(555) 000-0000"></div>
+        <div class="fg">
+          <label class="fl">Select virtual learning sessions — $39.75 each</label>
+          <div class="sess-grid">
+            <div class="sess-opt" onclick="toggleSess(this)"><div class="sn">Number Ninjas</div><div class="sm">Math · Beginner · 5–6 PM</div><div class="sp">$39.75</div></div>
+            <div class="sess-opt" onclick="toggleSess(this)"><div class="sn">Math Mavericks</div><div class="sm">Math · Intermediate · 6–7 PM</div><div class="sp">$39.75</div></div>
+            <div class="sess-opt" onclick="toggleSess(this)"><div class="sn">Problem Solvers Academy</div><div class="sm">Math · Advanced · 7–8 PM</div><div class="sp">$39.75</div></div>
+            <div class="sess-opt" onclick="toggleSess(this)"><div class="sn">Rookie Readers</div><div class="sm">Reading · Beginner · 5–6 PM</div><div class="sp">$39.75</div></div>
+            <div class="sess-opt" onclick="toggleSess(this)"><div class="sn">Word Warriors</div><div class="sm">Reading · Intermediate · 6–7 PM</div><div class="sp">$39.75</div></div>
+            <div class="sess-opt" onclick="toggleSess(this)"><div class="sn">Comprehension Crew</div><div class="sm">Reading · Advanced · 7–8 PM</div><div class="sp">$39.75</div></div>
+          </div>
+          <div class="resources-note">✓ Registration fee includes all learning resources needed for your scholar's virtual learning sessions.</div>
+        </div>
+        <div class="order-box">
+          <div id="o-lines"><div class="oempty">No sessions selected yet</div></div>
+          <div id="o-total" style="display:none" class="ototal"><span>Total</span><span id="o-amt"></span></div>
+        </div>
+        <div class="fg"><label class="fl">Start week</label>
+          <select class="fi">
+            <option>Week 1 – Jun 1</option><option>Week 2 – Jun 8</option><option>Week 3 – Jun 15</option>
+            <option>Week 4 – Jun 22</option><option>Week 6 – Jul 6</option><option>Week 7 – Jul 13</option><option>Week 8 – Jul 20</option>
+          </select>
+        </div>
+        <div class="fg"><label class="fl">Special notes or accommodations</label><textarea class="fi" rows="3" placeholder="Optional..."></textarea></div>
+        <button class="sub-btn" onclick="submitReg()">Submit registration</button>
+        <div class="ok-msg" id="reg-ok">✓ Registration submitted! We'll be in touch within 24 hours to confirm your scholar's spot and payment details.</div>
+      </div>
+    </div>
+
+    <div id="pg-contact" class="section">
+      <p class="pg-title">Get in touch</p>
+      <p class="pg-sub">Questions about virtual learning sessions, pricing, or enrollment? Book A Teacher is here to help.</p>
+      <div class="card">
+        <div class="contact-grid">
+          <div class="ci"><div class="ci-icon"><i class="ti ti-phone"></i></div><div><div class="ci-lbl">Phone</div><div class="ci-val">(904) 295-6678</div></div></div>
+          <div class="ci"><div class="ci-icon"><i class="ti ti-clock"></i></div><div><div class="ci-lbl">Scholar Session Hours</div><div class="ci-val">Mon–Thu, 5–8 PM</div></div></div>
+          <div class="ci"><div class="ci-icon"><i class="ti ti-currency-dollar"></i></div><div><div class="ci-lbl">Pricing</div><div class="ci-val">$39.75 per session · includes all learning resources</div></div></div>
+        </div>
+        <div class="fg"><label class="fl">Your name</label><input class="fi" type="text" placeholder="Full name"></div>
+        <div class="fg"><label class="fl">Email</label><input class="fi" type="email" placeholder="email@example.com"></div>
+        <div class="fg"><label class="fl">Topic</label>
+          <select class="fi"><option>General inquiry</option><option>Registration help</option><option>Virtual learning session details</option><option>Pricing & availability</option><option>Other</option></select>
+        </div>
+        <div class="fg"><label class="fl">Message</label><textarea class="fi" rows="4" placeholder="How can we help?"></textarea></div>
+        <button class="sub-btn" onclick="submitContact()">Send message</button>
+        <div class="ok-msg" id="contact-ok">✓ Message sent! We'll respond within one business day.</div>
+      </div>
+    </div>
+
+    <div id="pg-admin" class="section">
+      <p class="pg-title">Admin dashboard</p>
+      <p class="pg-sub">Manage registrations and view enrollment data.</p>
+      <div class="stats-grid">
+        <div class="stat"><div class="stat-lbl">Total enrolled</div><div class="stat-val">47</div></div>
+        <div class="stat"><div class="stat-lbl">Revenue collected</div><div class="stat-val">$1,868</div></div>
+        <div class="stat"><div class="stat-lbl">Pending review</div><div class="stat-val">5</div></div>
+        <div class="stat"><div class="stat-lbl">Per-session rate</div><div class="stat-val">$39.75</div></div>
+      </div>
+      <div class="admin-tabs">
+        <button class="atab active" onclick="adminTab('regs',this)">Registrations</button>
+        <button class="atab" onclick="adminTab('cap',this)">Session capacity</button>
+      </div>
+      <div id="asec-regs" class="asec active">
+        <div class="tbl-card">
+          <div class="tbl-hdr"><h3>Recent registrations</h3><span style="font-size:12px;color:var(--text2)">Showing 6 of 47</span></div>
+          <table>
+            <colgroup><col style="width:20%"><col style="width:9%"><col style="width:33%"><col style="width:16%"><col style="width:12%"><col style="width:10%"></colgroup>
+            <thead><tr><th>Scholar</th><th>Grade</th><th>Session(s)</th><th>Start week</th><th>Status</th><th>Paid</th></tr></thead>
+            <tbody>
+              <tr><td>Aaliyah Johnson</td><td>3rd</td><td>Number Ninjas, Rookie Readers</td><td>Wk 1 – Jun 1</td><td><span class="pill pill-ok">Confirmed</span></td><td>$79.50</td></tr>
+              <tr><td>Marcus Williams</td><td>5th</td><td>Math Mavericks</td><td>Wk 1 – Jun 1</td><td><span class="pill pill-ok">Confirmed</span></td><td>$39.75</td></tr>
+              <tr><td>Sofia Patel</td><td>2nd</td><td>Rookie Readers</td><td>Wk 2 – Jun 8</td><td><span class="pill pill-ok">Confirmed</span></td><td>$39.75</td></tr>
+              <tr><td>Elijah Carter</td><td>6th</td><td>Problem Solvers, Comp. Crew</td><td>Wk 1 – Jun 1</td><td><span class="pill pill-pend">Pending</span></td><td>—</td></tr>
+              <tr><td>Amara Thompson</td><td>4th</td><td>Word Warriors</td><td>Wk 3 – Jun 15</td><td><span class="pill pill-pend">Pending</span></td><td>—</td></tr>
+              <tr><td>Jaylen Brooks</td><td>1st</td><td>Number Ninjas, Rookie Readers</td><td>Wk 2 – Jun 8</td><td><span class="pill pill-ok">Confirmed</span></td><td>$79.50</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div id="asec-cap" class="asec">
+        <div class="tbl-card">
+          <div class="tbl-hdr"><h3>Virtual learning session enrollment</h3></div>
+          <table>
+            <colgroup><col style="width:28%"><col style="width:14%"><col style="width:18%"><col style="width:16%"><col style="width:12%"><col style="width:12%"></colgroup>
+            <thead><tr><th>Session</th><th>Type</th><th>Level</th><th>Time</th><th>Enrolled</th><th>Capacity</th></tr></thead>
+            <tbody>
+              <tr><td>Number Ninjas</td><td>Math</td><td><span class="lvl lvl-b">Beginner</span></td><td>5:00–6:00 PM</td><td>18</td><td>20</td></tr>
+              <tr><td>Math Mavericks</td><td>Math</td><td><span class="lvl lvl-i">Intermediate</span></td><td>6:00–7:00 PM</td><td>14</td><td>20</td></tr>
+              <tr><td>Problem Solvers Academy</td><td>Math</td><td><span class="lvl lvl-a">Advanced</span></td><td>7:00–8:00 PM</td><td>9</td><td>20</td></tr>
+              <tr><td>Rookie Readers</td><td>Reading</td><td><span class="lvl lvl-b">Beginner</span></td><td>5:00–6:00 PM</td><td>17</td><td>20</td></tr>
+              <tr><td>Word Warriors</td><td>Reading</td><td><span class="lvl lvl-i">Intermediate</span></td><td>6:00–7:00 PM</td><td>15</td><td>20</td></tr>
+              <tr><td>Comprehension Crew</td><td>Reading</td><td><span class="lvl lvl-a">Advanced</span></td><td>7:00–8:00 PM</td><td>10</td><td>20</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal" onclick="closeModal(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal(null)">×</button>
+    <h2 id="m-title"></h2>
+    <p class="modal-meta"><span id="m-sub"></span><span class="modal-price">$39.75 · includes all learning resources</span></p>
+    <p class="modal-desc" id="m-desc"></p>
+    <div class="modal-tabs">
+      <button class="modal-tab active" onclick="mTab('objectives',this)">Objectives</button>
+      <button class="modal-tab" onclick="mTab('topics',this)">Topics</button>
+      <button class="modal-tab" onclick="mTab('activities',this)">Activities</button>
+      <button class="modal-tab" onclick="mTab('materials',this)">Materials</button>
+    </div>
+    <div id="mt-objectives" class="mtab active"></div>
+    <div id="mt-topics" class="mtab"></div>
+    <div id="mt-activities" class="mtab"></div>
+    <div id="mt-materials" class="mtab"></div>
+    <button class="enroll-btn" onclick="goReg()">Enroll in this virtual learning session →</button>
+  </div>
+</div>
+
+<script>
+const PRICE=39.75;
+const WS={
+  math:[
+    {name:"Number Ninjas",level:"Beginner",lk:"b",time:"5:00–6:00 PM",type:"math",desc:"A fun, high-energy introduction to foundational math skills. Scholars build number sense and confidence with basic operations.",obj:["Recognize and write numbers 0–100","Add and subtract single and double-digit numbers","Understand place value (ones, tens, hundreds)","Build number sense through games and activities"],top:["Number recognition & counting","Addition with regrouping","Subtraction basics","Place value exploration","Number patterns"],act:["Number Ninja challenge cards","Place value dice games","Math fact fluency drills","Counting with manipulatives","Interactive whiteboard games"],mat:["Number cards","Dice","Base-10 blocks","Whiteboards & markers","Printed activity sheets"]},
+    {name:"Math Mavericks",level:"Intermediate",lk:"i",time:"6:00–7:00 PM",type:"math",desc:"Scholars explore multiplication and division through engaging strategies and real-world connections.",obj:["Master multiplication facts 1–12","Understand and apply division concepts","Connect multiplication and division as inverse operations","Solve multi-step problems using multiplication and division"],top:["Multiplication strategies","Division concepts","Fact families","Multi-step problems","Arrays and area models"],act:["Multiplication Madness relay race","Division Mania card game","Fact family triangles","Real-world word problems","Array building with tiles"],mat:["Multiplication charts","Flash cards","Graph paper","Tile manipulatives","Problem-solving worksheets"]},
+    {name:"Problem Solvers Academy",level:"Advanced",lk:"a",time:"7:00–8:00 PM",type:"math",desc:"Scholars tackle challenging word problems and critical thinking tasks that develop higher-order mathematical reasoning.",obj:["Apply multiple strategies to solve complex word problems","Analyze and interpret data from charts and graphs","Use logical reasoning to justify solutions","Develop perseverance through challenging math tasks"],top:["Multi-step word problems","Data analysis & graphing","Fractions & decimals","Logical reasoning puzzles","Math journaling"],act:["Math mystery challenges","Data collection and graphing projects","Logic puzzle stations","Math journal reflections","Scholar-led problem presentations"],mat:["Problem-solving journals","Graph paper","Rulers","Calculator (when appropriate)","Challenge problem cards"]}
+  ],
+  reading:[
+    {name:"Rookie Readers",level:"Beginner",lk:"b",time:"5:00–6:00 PM",type:"reading",desc:"A warm, supportive environment where scholars build foundational reading skills including phonics, sight words, and fluency.",obj:["Decode words using phonics and letter-sound relationships","Read and recognize high-frequency sight words","Develop reading fluency and expression","Build confidence as an emerging reader"],top:["Phonics & letter sounds","Sight word recognition","CVC and blended words","Reading fluency","Print concepts"],act:["Phonics sorting games","Sight word bingo","Partner reading with leveled texts","Read-aloud with expression practice","Alphabet and sound matching"],mat:["Leveled readers","Sight word cards","Phonics flashcards","Whiteboards & markers","Letter tiles"]},
+    {name:"Word Warriors",level:"Intermediate",lk:"i",time:"6:00–7:00 PM",type:"reading",desc:"Scholars expand their vocabulary and writing skills through creative expression and structured language activities.",obj:["Build vocabulary using context clues and word analysis","Write complete sentences with proper grammar and punctuation","Use descriptive language and varied sentence structure","Identify and apply parts of speech in writing"],top:["Vocabulary in context","Parts of speech","Sentence structure","Descriptive writing","Grammar & punctuation"],act:["Vocabulary building word maps","Grammar sorting activities","Descriptive writing prompts","Word warrior journals","Peer editing and sharing"],mat:["Vocabulary journals","Grammar activity cards","Writing prompt cards","Colored pencils for annotation","Dictionaries"]},
+    {name:"Comprehension Crew",level:"Advanced",lk:"a",time:"7:00–8:00 PM",type:"reading",desc:"Scholars apply higher-level reading strategies to deeply analyze and discuss a variety of texts.",obj:["Use reading strategies: predicting, questioning, summarizing, inferring","Identify main idea and supporting details","Make text-to-self, text-to-text, and text-to-world connections","Analyze author's purpose and text structure"],top:["Reading comprehension strategies","Main idea & details","Making inferences","Author's purpose & point of view","Text structures & features"],act:["Socratic seminar discussions","Annotation and close reading","Text-based writing responses","Story mapping and graphic organizers","Book club style sharing"],mat:["Grade-level reading passages","Graphic organizers","Sticky notes for annotation","Reading response journals","Highlighters"]}
+  ]
+};
+const WEEKS=[
+  {wk:"Wk 1",days:[{d:"Jun 1",dy:"Monday",t:"math"},{d:"Jun 2",dy:"Tuesday",t:"reading"},{d:"Jun 3",dy:"Wednesday",t:"math"},{d:"Jun 4",dy:"Thursday",t:"reading"}]},
+  {wk:"Wk 2",days:[{d:"Jun 8",dy:"Monday",t:"math"},{d:"Jun 9",dy:"Tuesday",t:"reading"},{d:"Jun 10",dy:"Wednesday",t:"math"},{d:"Jun 11",dy:"Thursday",t:"reading"}]},
+  {wk:"Wk 3",days:[{d:"Jun 15",dy:"Monday",t:"math"},{d:"Jun 16",dy:"Tuesday",t:"reading"},{d:"Jun 17",dy:"Wednesday",t:"math"},{d:"Jun 18",dy:"Thursday",t:"reading"}]},
+  {wk:"Wk 4",days:[{d:"Jun 22",dy:"Monday",t:"math"},{d:"Jun 23",dy:"Tuesday",t:"reading"},{d:"Jun 24",dy:"Wednesday",t:"math"},{d:"Jun 25",dy:"Thursday",t:"reading"}]},
+  {wk:"Wk 5",closed:true,label:"Jun 29 – Jul 2"},
+  {wk:"Wk 6",days:[{d:"Jul 6",dy:"Monday",t:"math"},{d:"Jul 7",dy:"Tuesday",t:"reading"},{d:"Jul 8",dy:"Wednesday",t:"math"},{d:"Jul 9",dy:"Thursday",t:"reading"}]},
+  {wk:"Wk 7",days:[{d:"Jul 13",dy:"Monday",t:"math"},{d:"Jul 14",dy:"Tuesday",t:"reading"},{d:"Jul 15",dy:"Wednesday",t:"math"},{d:"Jul 16",dy:"Thursday",t:"reading"}]},
+  {wk:"Wk 8",days:[{d:"Jul 20",dy:"Monday",t:"math"},{d:"Jul 21",dy:"Tuesday",t:"reading"},{d:"Jul 22",dy:"Wednesday",t:"math"},{d:"Jul 23",dy:"Thursday",t:"reading"}]}
+];
+let curFilter='all';
+function buildSched(){
+  const grid=document.getElementById('sched-grid');grid.innerHTML='';
+  WEEKS.forEach(w=>{
+    if(w.closed){
+      const el=document.createElement('div');el.className='closed-week';
+      el.innerHTML=`<div class="closed-header"><div class="wk">${w.wk}</div><div class="dy">${w.label}</div></div><div class="closed-notice"><div class="closed-icon">🏖️</div><div><div class="closed-title">Closed – Summer Vacation</div><div class="closed-sub">Virtual learning sessions will resume Monday, July 6. We wish all of our scholars a wonderful break!</div></div></div>`;
+      grid.appendChild(el);return;
+    }
+    w.days.forEach(d=>{
+      const sessions=WS[d.t].filter(s=>{
+        if(curFilter==='all')return true;if(curFilter==='math')return d.t==='math';if(curFilter==='reading')return d.t==='reading';
+        if(curFilter==='beginner')return s.lk==='b';if(curFilter==='intermediate')return s.lk==='i';if(curFilter==='advanced')return s.lk==='a';return true;
+      });
+      if(!sessions.length)return;
+      const card=document.createElement('div');card.className='day-card';
+      card.innerHTML=`<div class="day-hdr"><div class="wk">${w.wk}</div><div class="dy">${d.dy} · ${d.d}</div></div>`+
+        sessions.map(s=>`<div class="sess ${d.t==='math'?'math-bar':'read-bar'}" onclick='openModal(${JSON.stringify(s)})'>
+          <div class="sess-time">${s.time}</div><div class="sess-name">${s.name}</div>
+          <div class="sess-row"><span class="lvl lvl-${s.lk==='b'?'b':s.lk==='i'?'i':'a'}">${s.level}</span><span class="sess-price">$39.75</span></div>
+        </div>`).join('');
+      grid.appendChild(card);
+    });
+  });
+}
+function setFilter(f,btn){curFilter=f;document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');buildSched();}
+function ul(i){return`<ul>${i.map(x=>`<li>${x}</li>`).join('')}</ul>`;}
+function openModal(s){
+  document.getElementById('m-title').textContent=s.name;
+  document.getElementById('m-sub').textContent=s.type.charAt(0).toUpperCase()+s.type.slice(1)+' · '+s.level+' · '+s.time+' · ';
+  document.getElementById('m-desc').textContent=s.desc;
+  document.getElementById('mt-objectives').innerHTML=ul(s.obj);document.getElementById('mt-topics').innerHTML=ul(s.top);
+  document.getElementById('mt-activities').innerHTML=ul(s.act);document.getElementById('mt-materials').innerHTML=ul(s.mat);
+  document.querySelectorAll('.modal-tab').forEach((t,i)=>t.classList.toggle('active',i===0));
+  document.querySelectorAll('.mtab').forEach((x,i)=>x.classList.toggle('active',i===0));
+  document.getElementById('modal').classList.add('open');
+}
+function mTab(id,btn){
+  document.querySelectorAll('.mtab').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.modal-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('mt-'+id).classList.add('active');btn.classList.add('active');
+}
+function closeModal(e){if(!e||e.target===document.getElementById('modal'))document.getElementById('modal').classList.remove('open');}
+function goReg(){closeModal(null);showPage('register',document.querySelectorAll('.nav-tab')[1]);}
+function showPage(p,btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.getElementById('pg-'+p).classList.add('active');
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));btn.classList.add('active');
+}
+function toggleSess(el){
+  el.classList.toggle('sel');const sel=document.querySelectorAll('.sess-opt.sel');
+  const lines=document.getElementById('o-lines');const tot=document.getElementById('o-total');
+  if(!sel.length){lines.innerHTML='<div class="oempty">No sessions selected yet</div>';tot.style.display='none';return;}
+  lines.innerHTML=[...sel].map(e=>`<div class="orow"><span>${e.querySelector('.sn').textContent}</span><span>$${PRICE.toFixed(2)}</span></div>`).join('');
+  document.getElementById('o-amt').textContent='$'+(sel.length*PRICE).toFixed(2);tot.style.display='flex';
+}
+function submitReg(){const el=document.getElementById('reg-ok');el.style.display='block';setTimeout(()=>el.style.display='none',6000);}
+function submitContact(){const el=document.getElementById('contact-ok');el.style.display='block';setTimeout(()=>el.style.display='none',5000);}
+function adminTab(id,btn){
+  document.querySelectorAll('.asec').forEach(s=>s.classList.remove('active'));document.getElementById('asec-'+id).classList.add('active');
+  document.querySelectorAll('.atab').forEach(t=>t.classList.remove('active'));btn.classList.add('active');
+}
+buildSched();
+</script>
+</body>
+</html>
